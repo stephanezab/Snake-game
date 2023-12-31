@@ -1,144 +1,142 @@
-from tkinter import *
+import pygame
+import time
 import random
 
-GAME_WIDTH = 500
-GAME_HEIGHT = 500
-SPEED = 200
-SPACE_SIZE = 50
-BODY_PARTS = 3
-SNAKE_COLOR = "green"
-FOOD_COLOR = "red"
-BACKGROUND_COLOR = "black"
+pygame.init()
 
+# Define colors
+white = (255, 255, 255)
+yellow = (255, 255, 102)
+black = (0, 0, 0)
+red = (213, 50, 80)
+green = (0, 255, 0)
+blue = (50, 153, 213)
 
-class Snake:
-    def __init__(self):
-        self.body_size = BODY_PARTS
-        self.coordinates = []
-        self.squares = []
+# Display size
+WIN_WIDTH = 600
+WIN_HEIGHT = 400
 
-        for i in range(0, BODY_PARTS):
-            self.coordinates.append([0, 0])
+# Initialize display
+WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+pygame.display.set_caption('Snake Game by Pythonista')
 
-        for x, y in self.coordinates:
-            square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR, tag ="snake")
-            self.squares.append(square)
-    
-class Food:
-    
-    def __init__(self):
-        
-        x = random.randint(0, int(GAME_WIDTH /  SPACE_SIZE) - 1) *  SPACE_SIZE
-        y = random.randint(0, int(GAME_HEIGHT /  SPACE_SIZE) - 1) *  SPACE_SIZE
-        self.coordinates = [x,y]
-        canvas.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill= FOOD_COLOR, tag="food")
+clock = pygame.time.Clock()
 
-def next_turn(snake, food):
-    x, y = snake.coordinates[0]
+SNAKE_BLOCK = 10
+SNAKE_SPEED = 10
 
-    if direction == "up":
-        y -= SPACE_SIZE
+font_style = pygame.font.SysFont(None, 35)
+score_font = pygame.font.SysFont(None, 25)
 
-    elif direction == "down":
-        y += SPACE_SIZE
+# Function to display the score of the player
+def your_score(score):
+    value = score_font.render("Your Score: " + str(score), True, yellow)
+    WIN.blit(value, [0, 0])
 
-    elif direction == "left":
-        x -= SPACE_SIZE
+# Function to draw the snake
+def our_snake(SNAKE_BLOCK, snake_list):
+    for x in snake_list:
+        pygame.draw.rect(WIN, black, [x[0], x[1], SNAKE_BLOCK, SNAKE_BLOCK])
 
-    elif direction == "right":
-        x += SPACE_SIZE
-    
-    snake.coordinates.insert(0, (x,y)) 
+def draw(snake_list, score):
+    value = score_font.render("Your Score: " + str(score), True, yellow)
+    WIN.blit(value, [0, 0])
 
-    square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill= SNAKE_COLOR)
-    
-    snake.squares.insert(0, square)
+    for x in snake_list:
+        pygame.draw.rect(WIN, black, [x[0], x[1], SNAKE_BLOCK, SNAKE_BLOCK])
 
-    if x == food.coordinates[0] and y == food.coordinates[1]:
-        global score
-        score += 1
-        label.config(text="Score:{}".format(score))
+# Function to display messages
+def message(msg, color):
+    mesg = font_style.render(msg, True, color)
+    WIN.blit(mesg, [WIN_WIDTH / 6, WIN_HEIGHT / 3])
 
-        canvas.delete("food")
-        food = Food()
+def gameLoop():  # main game loop
+    game_over = False
+    game_close = False
 
-    else:
-        
-        del snake.coordinates[-1]
+    x1 = WIN_WIDTH / 2
+    y1 = WIN_HEIGHT / 2
 
-        canvas.delete(snake.squares[-1]) # Need understanding
+    x1_change = 0
+    y1_change = 0
 
-        del snake.squares[-1]
+    snake_List = []
+    Length_of_snake = 1
 
-    
-    if check_collisions(snake) is True:
-        game_over()
-    
-    else:
-        window.after(SPEED, next_turn, snake, food) # need understanding
+    # Randomly place food item
+    foodx = round(random.randrange(0, WIN_WIDTH - SNAKE_BLOCK) / 10.0) * 10.0
+    foody = round(random.randrange(0, WIN_HEIGHT - SNAKE_BLOCK) / 10.0) * 10.0
 
+    while not game_over:
 
+        while game_close == True:
+            WIN.fill(blue)
+            message("You Lost! Press C-Play Again or Q-Quit", red)
+            your_score(Length_of_snake - 1)
+            pygame.display.update()
 
-    
+            for event in pygame.event.get():
+                # if event.type == pygame.QUIT:
+                #     game_over = True
+                #     game_close = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        game_over = True
+                        game_close = False
+                    if event.key == pygame.K_c:
+                        gameLoop()
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_over = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    x1_change = -SNAKE_BLOCK
+                    y1_change = 0
+                elif event.key == pygame.K_RIGHT:
+                    x1_change = SNAKE_BLOCK
+                    y1_change = 0
+                elif event.key == pygame.K_UP:
+                    y1_change = -SNAKE_BLOCK
+                    x1_change = 0
+                elif event.key == pygame.K_DOWN:
+                    y1_change = SNAKE_BLOCK
+                    x1_change = 0
 
-def change_direction(new_direction):
-    global direction
+        if x1 >= WIN_WIDTH or x1 < 0 or y1 >= WIN_HEIGHT or y1 < 0: # need fix dimensions
+            game_close = True
 
-    if new_direction == "left" and direction != "right":
-        direction = new_direction
+        x1 += x1_change
+        y1 += y1_change
+        WIN.fill(blue)
+        pygame.draw.rect(WIN, green, [foodx, foody, SNAKE_BLOCK, SNAKE_BLOCK])
+        snake_Head = []
+        snake_Head.append(x1)
+        snake_Head.append(y1)
+        snake_List.append(snake_Head)
 
-    elif new_direction == "right" and direction != "left":
-        direction = new_direction
+        if len(snake_List) > Length_of_snake:
+            del snake_List[0]
 
-    elif new_direction == "up" and direction != "down":
-        direction = new_direction
+        for x in snake_List[:-1]:
+            if x[0] == snake_Head[0] and x[1] == snake_Head[1]:
+                game_close = True
 
-    elif new_direction == "down" and direction != "up":
-        direction = new_direction
+        our_snake(SNAKE_BLOCK, snake_List)
+        your_score(Length_of_snake - 1)
 
-def check_collisions(snake):
+        #draw(snake_List, Length_of_snake - 1)
 
-    x, y = snake.coordinates[0]
+        pygame.display.update()
 
-    if x < 0 or x == GAME_WIDTH:
-        return True
-    
-    if y < 0 or y == GAME_HEIGHT:
-        return True
-    
-    for i in snake.coordinates[1:]:
-        if x == i[0] and y == i[1]:
-            return True
-    
+        if x1 == foodx and y1 == foody:
+            foodx = round(random.randrange(0, WIN_WIDTH - SNAKE_BLOCK) / 10.0) * 10.0
+            foody = round(random.randrange(0, WIN_HEIGHT - SNAKE_BLOCK) / 10.0) * 10.0
+            Length_of_snake += 1
 
+        clock.tick(SNAKE_SPEED)
 
-def game_over():
-    canvas.delete(ALL)
-    canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2,
-                       font=("consolas", 70), text="GAME OVER", fill="red", tag="game")
+    pygame.quit()
+    quit()
 
-window = Tk()
-window.title("Snake game")
-#window.resizable(False, False)
-
-score = 0
-direction = "down"
-
-label = Label(window, text="Score:{}".format(score), font=("consolas", 40))
-label.pack()
-
-canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
-canvas.pack()
-
-window.bind("<Left>", lambda event: change_direction("left"))
-window.bind("<Right>", lambda event: change_direction("right"))
-window.bind("<Up>", lambda event: change_direction("up"))
-window.bind("<Down>", lambda event: change_direction("down"))
-
-snake = Snake()
-food = Food()
-
-next_turn(snake, food)
-
-window.mainloop()
+gameLoop()
