@@ -29,14 +29,14 @@ font_style = pygame.font.SysFont(None, 35)
 score_font = pygame.font.SysFont(None, 25)
 
 # Function to display the score of the player
-def your_score(score):
-    value = score_font.render("Your Score: " + str(score), True, yellow)
-    WIN.blit(value, [0, 0])
+# def your_score(score):
+#     value = score_font.render("Your Score: " + str(score), True, yellow)
+#     WIN.blit(value, [0, 0])
 
-# Function to draw the snake
-def our_snake(SNAKE_BLOCK, snake_list):
-    for x in snake_list:
-        pygame.draw.rect(WIN, black, [x[0], x[1], SNAKE_BLOCK, SNAKE_BLOCK])
+# # Function to draw the snake
+# def our_snake(SNAKE_BLOCK, snake_list):
+#     for x in snake_list:
+#         pygame.draw.rect(WIN, black, [x[0], x[1], SNAKE_BLOCK, SNAKE_BLOCK])
 
 def draw(snake_list, score):
     value = score_font.render("Your Score: " + str(score), True, yellow)
@@ -72,7 +72,7 @@ def gameLoop():  # main game loop
         while game_close == True:
             WIN.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
-            your_score(Length_of_snake - 1)
+            #your_score(Length_of_snake - 1)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -122,10 +122,10 @@ def gameLoop():  # main game loop
             if x[0] == snake_Head[0] and x[1] == snake_Head[1]:
                 game_close = True
 
-        our_snake(SNAKE_BLOCK, snake_List)
-        your_score(Length_of_snake - 1)
+        # our_snake(SNAKE_BLOCK, snake_List)
+        # your_score(Length_of_snake - 1)
 
-        #draw(snake_List, Length_of_snake - 1)
+        draw(snake_List, Length_of_snake - 1)
 
         pygame.display.update()
 
