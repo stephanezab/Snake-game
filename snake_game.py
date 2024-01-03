@@ -54,6 +54,8 @@ def gameLoop():  # main game loop
     game_over = False
     game_close = False
 
+    prev_direction = "down"
+
     x1 = WIN_WIDTH / 2
     y1 = 0
 
@@ -90,16 +92,20 @@ def gameLoop():  # main game loop
             if event.type == pygame.QUIT:
                 game_over = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and prev_direction != "right":
+                    prev_direction = "left"
                     x1_change = -SNAKE_BLOCK
                     y1_change = 0
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT and prev_direction != "left":
+                    prev_direction = "right"
                     x1_change = SNAKE_BLOCK
                     y1_change = 0
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP and prev_direction != "down":
+                    prev_direction = "up"
                     y1_change = -SNAKE_BLOCK
                     x1_change = 0
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN and prev_direction != "up":
+                    prev_direction = "down"
                     y1_change = SNAKE_BLOCK
                     x1_change = 0
 
