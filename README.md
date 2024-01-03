@@ -1,4 +1,6 @@
 # Snake-game
+## demo
+![snake-gif](https://github.com/stephanezab/Snake-game/assets/75401897/74b9d40a-6a82-4f0a-afd7-1bc00629a989)
 
 ## Description 
 
