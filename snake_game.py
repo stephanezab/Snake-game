@@ -103,13 +103,14 @@ def gameLoop():  # main game loop
                     y1_change = SNAKE_BLOCK
                     x1_change = 0
 
-        if x1 >= WIN_WIDTH - SNAKE_BLOCK  or x1 < 0 or y1 >= WIN_HEIGHT - SNAKE_BLOCK or y1 < 0:
+        if x1 >= WIN_WIDTH  or x1 < 0 or y1 >= WIN_HEIGHT or y1 < 0:
             game_close = True
 
         x1 += x1_change
         y1 += y1_change
         WIN.fill(blue)
         pygame.draw.rect(WIN, red, [foodx, foody, SNAKE_BLOCK, SNAKE_BLOCK])
+        
         snake_Head = []
         snake_Head.append(x1)
         snake_Head.append(y1)
