@@ -73,7 +73,7 @@ def gameLoop():  # main game loop
 
         while game_close == True:
             WIN.fill(blue)
-            message("You Lost! Press C-Play Again or Q-Quit", red, Length_of_snake - 1)
+            message("You Lost! Press R-Restart or Q-Quit", red, Length_of_snake - 1)
             #your_score(Length_of_snake - 1)
             pygame.display.update()
 
@@ -85,7 +85,7 @@ def gameLoop():  # main game loop
                     if event.key == pygame.K_q:
                         game_over = True
                         game_close = False
-                    if event.key == pygame.K_c:
+                    if event.key == pygame.K_r:
                         gameLoop()
 
         for event in pygame.event.get():
