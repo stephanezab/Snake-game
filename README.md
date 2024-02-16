@@ -30,7 +30,8 @@ To run this game, you will need:
 ## How to Play
 
 1. Run the game script:
-```python snake_game.py
+```bash
+python snake_game.py
 ```
 2. Use the arrow keys (↑, ↓, ←, →) to control the snake.
 3. EAt food to grow the snake in length.
