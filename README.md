@@ -36,3 +36,10 @@ To run this game, you will need:
 3. EAt food to grow the snake in length.
 4. Avoid hitting the walls or the snake own tail.
 
+## How to use
+
+1. **Clone or Download This Repository**
+    ```bash
+    git clone https://github.com/stephanezab/PongGame.git
+    ```
+
