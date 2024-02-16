@@ -40,6 +40,6 @@ To run this game, you will need:
 
 1. **Clone or Download This Repository**
     ```bash
-    git clone https://github.com/stephanezab/PongGame.git
+    git https://github.com/stephanezab/Snake-game.git
     ```
 
